@@ -46,8 +46,86 @@ Control Flow Graph за searchBookByTitle
 
 Control Flow Graph за borrowBook
 
+                         ┌─────────┐
+                         │  START  │
+                         └────┬────┘
+                              │
+                              v
+        ┌─────────────────────────────────────┐
+        │ title.isEmpty() || author.isEmpty()?│
+        └───────────────┬─────────────────────┘    
+                 true   │   false               
+                        │                   
+        ┌───────────────┘
+        v
+┌──────────────────────────────────────┐
+│ throw IllegalArgumentException        │
+│ "Invalid search query"               │
+└──────────────────┬───────────────────┘
+                   │
+                   v
+                 ┌─────┐
+                 │ END │
+                 └─────┘
+
+false од првиот if:
+                              │
+                              v
+                 ┌─────────────────────┐
+                 │ for each book       │
+                 │ in books            │
+                 └──────┬────────┬─────┘
+                  има   │        │ нема повеќе
+                  книга │        │ книги
+                        │        │
+                        v        v
+ ┌──────────────────────────────────────┐
+ │ title matches && author matches?     │
+ └──────────────┬───────────────────────┘
+          true  │ false
+                │
+                │
+                v
+      ┌─────────────────────┐
+      │ !book.isBorrowed()? │
+      └──────┬────────┬─────┘
+          true       false
+           │           │
+           v           v
+┌────────────────────┐  ┌──────────────────────────────┐
+│ book.setBorrowed   │  │ throw RuntimeException        │
+│ println success    │  │ "Book is already borrowed."  │
+└─────────┬──────────┘  └──────────────┬───────────────┘
+          │                            │
+          v                            v
+   ┌────────────┐                    ┌─────┐
+   │ return     │                    │ END │
+   └─────┬──────┘                    └─────┘
+         │
+         v
+       ┌─────┐
+       │ END │
+       └─────┘
 
 
+false од title matches && author matches:
+                │
+                v
+          назад на for loop
+
+
+кога for нема повеќе книги:
+                        │
+                        v
+        ┌──────────────────────────────┐
+        │ throw RuntimeException       │
+        │ "Book not found"            │
+        └──────────────┬───────────────┘
+                       │
+                       v
+                     ┌─────┐
+                     │ END │
+                     └─────┘
 
 
 3. Цикломатската комплексност на функцијата **searchBookByTitle** е 5, ако целиот услов со && се третира како еден decision point.
